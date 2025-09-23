@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Contact = require('../models/contacts');
+const {body, validationResult } = require('express-validator');
 
 
 exports.getContacts = async(req,res)=>{
@@ -54,6 +55,12 @@ exports.addContactPage = (req,res)=>{
 
 exports.addContact = async(req,res)=>{
     try {
+      const error = validationResult(req);
+        // console.log('errorororor',error);
+        
+       if(!error.isEmpty()) return res.render('add-contact',{errMessage:error});
+    //    if(!error.isEmpty()) return res.send({errMessage:error});
+
         const { first_name,last_name,email,phone,address } = req.body;
          await Contact.create({
             first_name,last_name,email,phone,address
