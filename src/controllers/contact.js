@@ -50,18 +50,20 @@ exports.getContact = async(req,res)=>{
 }
 
 exports.addContactPage = (req,res)=>{
-     res.render('add-contact')
+     res.render('add-contact',{csrfToken:req.csrfToken()})
 }
 
 exports.addContact = async(req,res)=>{
+console.log('req.body >>>>>',req.body)
+
     try {
       const error = validationResult(req);
-        // console.log('errorororor',error);
+        console.log('errorororor',error);
         
-       if(!error.isEmpty()) return res.render('add-contact',{errMessage:error});
+       if(!error.isEmpty()) return res.render('add-contact',{errMessage:error,csrfToken:req.csrfToken()});
     //    if(!error.isEmpty()) return res.send({errMessage:error});
 
-        const { first_name,last_name,email,phone,address } = req.body;
+        const { first_name,last_name,email,phone,address} = req.body;
          await Contact.create({
             first_name,last_name,email,phone,address
         })
